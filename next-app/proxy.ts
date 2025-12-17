@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LOCALES } from "./libs/common";
+import { DEFAULT_LOCALES } from "./libs/common";
 import { DEFAULT_LOCALE } from "./libs/constants";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasLocale = Object.keys(LOCALES).some(
+  const hasLocale = Object.keys(DEFAULT_LOCALES).some(
     (locale) => pathname.startsWith(`/${locale}`) || pathname === `/${locale}`
   );
 

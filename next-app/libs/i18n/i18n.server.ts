@@ -1,5 +1,5 @@
 import i18next, { i18n as I18nInstance } from "i18next";
-import { LOCALES, } from "../common";
+import { DEFAULT_LOCALES, } from "../common";
 import { DEFAULT_LOCALE } from "../constants";
 
 const INSTANCES: Map<string, I18nInstance> = new Map<string, I18nInstance>();
@@ -9,19 +9,19 @@ export default async function initI18nServer(locale: string) {
     return INSTANCES.get(locale);
   }
 
-  const instaince = i18next.createInstance();
+  const instance = i18next.createInstance();
 
-  await instaince
+  await instance
     .init({
       lng: locale,
-      resources: LOCALES,
+      resources: DEFAULT_LOCALES,
       fallbackLng: DEFAULT_LOCALE,
       interpolation: {
         escapeValue: false,
       },
     });
 
-  INSTANCES.set(locale, instaince);
+  INSTANCES.set(locale, instance);
 
-  return instaince;
+  return instance;
 }
