@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DEFAULT_LOCALES } from "./libs/common";
 import { DEFAULT_LOCALE } from "./libs/constants";
+import { auth } from "./auth";
+
+const privateRoutes = ['/private'];
+const unauthorizeRoutes = ['/sign-in'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -8,7 +12,25 @@ export async function proxy(request: NextRequest) {
     (locale) => pathname.startsWith(`/${locale}`) || pathname === `/${locale}`
   );
 
-  if (hasLocale) return;
+  if (hasLocale) {
+    const session = await auth();
+    const isPrivate = privateRoutes.some((route) =>
+      pathname.includes(route));
+    const isUnauthorize = unauthorizeRoutes.some((route) =>
+      pathname.includes(route));
+
+    if (session) {
+      if (isUnauthorize) {
+        return NextResponse.redirect(new URL('/private', request.nextUrl));
+      }
+    } else {
+      if (isPrivate) {
+        return NextResponse.redirect(new URL('/sign-in', request.nextUrl));
+      }
+    }
+
+    return;
+  }
 
   request.nextUrl.pathname = `/${DEFAULT_LOCALE}/${pathname}`;
   
@@ -17,6 +39,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next|favicon.ico|robots.txt|sitemap.xml|images|css|fonts|media|public).*)'
+    '/((?!_next|api|admin|favicon.ico|robots.txt|sitemap.xml|images|css|fonts|media|public).*)'
   ]
 }
