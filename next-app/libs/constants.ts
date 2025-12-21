@@ -1,6 +1,6 @@
-import { Locale } from "./common";
+import { Locale } from "./types";
 
-export const DEFAULT_LOCALE: Locale = 'ua';
+export const DEFAULT_LOCALE: Locale = "ua";
 
 export const SESSION_SECRET: string = 
-  process.env.NEXTAUTH_SECRET || 'auth.session.secret';
+  process.env.NEXTAUTH_SECRET || 'session.secret';

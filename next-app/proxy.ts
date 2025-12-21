@@ -21,11 +21,11 @@ export async function proxy(request: NextRequest) {
 
     if (session) {
       if (isUnauthorize) {
-        return NextResponse.redirect(new URL('/private', request.nextUrl));
+        return NextResponse.redirect(new URL(`/${pathname.split('/')[1]}/private`, request.nextUrl));
       }
     } else {
       if (isPrivate) {
-        return NextResponse.redirect(new URL('/sign-in', request.nextUrl));
+        return NextResponse.redirect(new URL(`/${pathname.split('/')[1]}/sign-in`, request.nextUrl));
       }
     }
 

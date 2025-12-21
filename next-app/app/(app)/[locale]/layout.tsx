@@ -1,10 +1,10 @@
-import { SessionProvider } from 'next-auth/react';
-import { auth } from '@/auth';
-import { Locale } from '@/libs/common';
+import { Locale } from '@/libs/types';
 import LocaleDetector from '@/components/LocaleDetector';
-import '../globals.css';
+import { auth } from '@/auth';
+import Logout from '@/components/Logout';
+import Link from 'next/link';
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: Readonly<{
@@ -16,19 +16,27 @@ export default async function RootLayout({
   const { locale } = resolvedParams;
   
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        <SessionProvider session={session}>
-          <pre>
-            {JSON.stringify(session)}
-          </pre>
-          <LocaleDetector locale={locale as unknown as Locale} />
+    <>
+      <LocaleDetector locale={locale as unknown as Locale} />
+      
+      <html lang="en" suppressHydrationWarning>
+        <body suppressHydrationWarning>
+
+          {session ? (
+            <Logout />
+          ) : (
+            <>
+              <Link href={`/${locale}/sign-in`}>
+                Sign - In
+              </Link>
+            </>
+          )}
 
           <main>
             {children}
           </main>
-        </SessionProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </>
   );
 }

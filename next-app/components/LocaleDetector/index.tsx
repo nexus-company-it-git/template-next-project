@@ -1,6 +1,6 @@
 'use client';
 
-import { Locale } from "@/libs/common";
+import { Locale } from "@/libs/types";
 import i18n from "@/libs/i18n/i18n.client";
 import { useEffect } from "react";
 

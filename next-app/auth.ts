@@ -1,6 +1,5 @@
 import { Provider } from "next-auth/providers";
 import Credentials from "next-auth/providers/credentials";
-import { mockSignup, SignupPayload } from "./app/(actions)/auth/actions";
 import NextAuth from "next-auth";
 import { SESSION_SECRET } from "./libs/constants";
 
@@ -21,7 +20,14 @@ export const providers: Provider[] = [
       }
     },
     async authorize(credentials) {
-      return await mockSignup(credentials as Partial<SignupPayload>);
+
+      // TODO Authorization request
+      
+      return {
+        id: '1',
+        name: 'John Doe',
+        email: 'john.doe@gmail.com',
+      }
     }
   })
 ]
