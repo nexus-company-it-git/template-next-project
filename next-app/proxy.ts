@@ -13,9 +13,10 @@ export async function proxy(request: NextRequest) {
   );
 
   if (hasLocale) {
+    const newPathname = `/${pathname.split('/').slice(2).join('/')}`;
     const session = await auth();
     const isPrivate = privateRoutes.some((route) =>
-      pathname.includes(route));
+      route === '/' ? route === newPathname : pathname.includes(route));
     const isUnauthorize = unauthorizeRoutes.some((route) =>
       pathname.includes(route));
 
@@ -29,7 +30,7 @@ export async function proxy(request: NextRequest) {
       }
     }
 
-    return;
+    return NextResponse.next();
   }
 
   request.nextUrl.pathname = `/${DEFAULT_LOCALE}/${pathname}`;
